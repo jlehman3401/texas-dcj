@@ -6,7 +6,7 @@ import time
 
 texas_df = pd.read_csv('texas-deathrow-executions.csv', index_col='Execution_id')
 
-base = 'https://www.tdcj.texas.gov/death_row/'
+base_url = 'https://www.tdcj.texas.gov/death_row/'
 
 for i in range(len(texas_df)):
 	last_url = texas_df.iloc[i][8]
@@ -28,6 +28,6 @@ for i in range(len(texas_df)):
 			f.write(p.text)
 	f.close()
 
-	print(f'offender {exid} statement gathered')
+	print(f'offender {ex_id} statement gathered')
 
-	time.sleep(2)
+	time.sleep(1)
