@@ -18,11 +18,13 @@ values = list()
 for p in p_tags:
     p_tag_list.append(p.text)
     
-for item in p_tag_list:
-    if p_tag_list.index(item) % 2 == 0:
-        headers.append(item)
-    if p_tag_list.index(item) % 2 == 1:
-            values.append(item)
+    
+name_num = p_tag_list[3].split('#')
+
+headers = [p_tag_list[0]] + [p_tag_list[0]] + ['TDCJ_num:'] + [p_tag_list[4]]
+
+values = [p_tag_list[1]] + [name_num[0].strip()] + [name_num[1]] + p_tag_list[5:]
+
 
 offender_dict = dict(zip(headers, values))
 
