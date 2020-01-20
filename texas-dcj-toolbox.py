@@ -8,10 +8,11 @@ import time
 
 parser = argparse.ArgumentParser()
 
-group = parser.add_mutually_exclusive_group(required=True)
+group = parser.add_mutually_exclusive_group(required=False)
 
 group.add_argument('--name', type=str, default='index_given', help='Enter the first name of the offender followed by last name, separating with a space')
 group.add_argument('--execution_id', type=int, default=0, help='Enter the Execution id as an integer. See Texas-Deathrow-Executions.csv')
+
 
 args = parser.parse_args()
 
@@ -67,9 +68,17 @@ def get_last_statement(offender_url):
 			line = line.replace(u'\u00a0','')
 			clean_statement.append(line)
 
-			# need to adjust dictionary, ID number
+		values = ['#####','#####','#####','#####']
 		headers = [p_tag_list[0].strip(), p_tag_list[2].strip(), 'TDCJ_num', p_tag_list[4].strip()]
-		values = [p_tag_list[1].strip()] + [p_tag_list[3].split('#')[0]] + [p_tag_list[3].split('#')[1]] + clean_statement
+		
+
+		values[0] = [p_tag_list[1].strip()]
+		values[1] = [p_tag_list[3].split('#')[0]]
+		values[3] = clean_statement
+		try:
+			values[2] = [p_tag_list[3].split('#')[1]]
+		except IndexError:
+			pass
 
 		final_statement_dict = dict(zip(headers, values))
 
@@ -141,7 +150,11 @@ def retrieve_record_series(index_start, index_end):
 
 		time.sleep(2)
 
-print('Record retrieved')
+
+if id_end > 0:
+
+	retrieve_record_series(id_start,id_end)
+
 
 if offender_input_name == 'index_given':
 
@@ -167,10 +180,3 @@ with open(f'No.{ex_id}-{name}-{tdcj_no}-last-statement.txt', 'w') as outfile:
 	json.dump(offender_dict, outfile, indent=4)
 
 print('File Done')
-
-
-
-
-
-
-
